@@ -181,21 +181,28 @@ public class RegistryProtocol implements Protocol {
      * 也就是说，这一条大的调用链，包含两条小的调用链。原因是：首先，传入的是注册中心的 URL ，通过 Protocol$Adaptive 获取到的是 RegistryProtocol 对象。
      * 其次，RegistryProtocol 会在其 #export(...) 方法中调用doLocalExport(...)方法，使用服务提供者的 URL ( 即注册中心的 URL 的 export 参数值)，再次调用 Protocol$Adaptive 获取到的是 DubboProtocol 对象，进行服务暴露。
      */
+    
     @Override
     public <T> Exporter<T> export(final Invoker<T> originInvoker) throws RpcException {
+
+    	//originInvoker.getUrl()的值是ServiceConfig的642行的proxyFactory.getInvoker()的第三个入参
+    	//例如：例如：registry://224.5.6.7:1234/org.apache.dubbo.registry.RegistryService?application=demo-provider&dubbo=2.0.2&export=injvm%3A%2F%2F10.216.40.189%3A65326%2Forg.apache.dubbo.demo.DemoService%3Faccesslog%3Dtrue%26anyhost%3Dtrue%26application%3Ddemo-provider%26bind.ip%3D10.216.40.189%26bind.port%3D65326%26dubbo%3D2.0.2%26generic%3Dfalse%26interface%3Dorg.apache.dubbo.demo.DemoService%26methods%3DsayHello%26notify%3Dfalse%26pid%3D36536%26qos.port%3D22222%26side%3Dprovider%26specVersion%3D%26timeout%3D100000%26timestamp%3D1556195586976&pid=36536&qos.port=22222&registry=multicast&timestamp=1556195586971
+    	System.out.println("originInvoker.getUrl():======"+originInvoker.getUrl());
     	
-    	 // 获取注册中心 URL，以 zookeeper 注册中心为例，得到的示例 URL 如下：
+    	 // 获取注册中心 URL，以 zookeeper 注册中心为例（如果原来的originInvoker.getUrl()的值以registry开头，就替换成具体的协议，例如zookeeper），得到的示例 URL 如下：
         // zookeeper://127.0.0.1:2181/com.alibaba.dubbo.registry.RegistryService?application=demo-provider&dubbo=2.0.2&export=dubbo%3A%2F%2F172.17.48.52%3A20880%2Fcom.alibaba.dubbo.demo.DemoService%3Fanyhost%3Dtrue%26application%3Ddemo-provider
         URL registryUrl = getRegistryUrl(originInvoker);
         // url to export locally
+        //从originInvoker中取出服务提供者信息（以export为key，这是ServiceConfig的642行放进去的）
         URL providerUrl = getProviderUrl(originInvoker);
 
         // Subscribe the override data
         // FIXME When the provider subscribes, it will affect the scene : a certain JVM exposes the service and call
         //  the same service. Because the subscribed is cached key with the name of the service, it causes the
         //  subscription information to cover.
-        // 获取订阅 URL，比如：
-        // provider://172.17.48.52:20880/com.alibaba.dubbo.demo.DemoService?category=configurators&check=false&anyhost=true&application=demo-provider&dubbo=2.0.2&generic=false&interface=com.alibaba.dubbo.demo.DemoService&methods=sayHello
+        // 获取订阅 URL，将providerUrl的开头替换成provider，并添加几个参数（category=configurators&check=false），
+        //例如：原来的的providerUrl是injvm://10.216.40.189:50063/org.apache.dubbo.demo.DemoService?accesslog=true&anyhost=true&application=demo-provider&bind.ip=10.216.40.189&bind.port=50063&dubbo=2.0.2&generic=false&interface=org.apache.dubbo.demo.DemoService&methods=sayHello&notify=false&pid=37996&qos.port=22222&side=provider&specVersion=&timeout=100000&timestamp=1556196555239
+        //生成的overrideSubscribeUrl是provider://10.216.40.189:50063/org.apache.dubbo.demo.DemoService?accesslog=true&anyhost=true&application=demo-provider&bind.ip=10.216.40.189&bind.port=50063&category=configurators&check=false&dubbo=2.0.2&generic=false&interface=org.apache.dubbo.demo.DemoService&methods=sayHello&notify=false&pid=37996&qos.port=22222&side=provider&specVersion=&timeout=100000&timestamp=1556196555239
         final URL overrideSubscribeUrl = getSubscribedOverrideUrl(providerUrl);
         // 创建监听器
         final OverrideListener overrideSubscribeListener = new OverrideListener(overrideSubscribeUrl, originInvoker);
@@ -207,6 +214,7 @@ public class RegistryProtocol implements Protocol {
         final ExporterChangeableWrapper<T> exporter = doLocalExport(originInvoker, providerUrl);
 
         // url to registry 根据originInvoker的url初始化一个对应的Registry，例如zk对应ZookeeperRegistryFactory。
+        //比如：registry形式为multicast://224.5.6.7:1234/org.apache.dubbo.registry.RegistryService?application=demo-provider&dubbo=2.0.2&interface=org.apache.dubbo.registry.RegistryService&pid=37996&qos.port=22222&timestamp=1556196555234
         final Registry registry = getRegistry(originInvoker);
         
         // 获取已注册的服务提供者 URL，比如：

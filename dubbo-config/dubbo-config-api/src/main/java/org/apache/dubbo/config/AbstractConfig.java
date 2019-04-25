@@ -581,6 +581,7 @@ public abstract class AbstractConfig implements Serializable {
                     try {
                         String value = compositeConfiguration.getString(extractPropertyName(getClass(), method));
                         // isTypeMatch() is called to avoid duplicate and incorrect update, for example, we have two 'setGeneric' methods in ReferenceConfig.
+                        //isTypeMatch()方法用来避免重复不正确的更新，例如：在ReferenceConfig中，有两个setGeneric方法，其中方法入参为boolean类型、且value是true或者false的，不执行。
                         if (StringUtils.isNotEmpty(value) && ClassHelper.isTypeMatch(method.getParameterTypes()[0], value)) {
                             method.invoke(this, ClassHelper.convertPrimitive(method.getParameterTypes()[0], value));
                         }

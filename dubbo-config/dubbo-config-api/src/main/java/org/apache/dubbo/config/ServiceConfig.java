@@ -635,6 +635,10 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                          * Invoker 是实体域，它是 Dubbo 的核心模型，其它模型都向它靠扰，或转换成它，它代表一个可执行体，可向它发起 invoke 调用，
                          * 它有可能是一个本地的实现，也可能是一个远程的实现，也可能一个集群实现。
                          */
+                        
+                        //第三个参数url的形式，例如：registry://224.5.6.7:1234/org.apache.dubbo.registry.RegistryService?application=demo-provider&dubbo=2.0.2&export=injvm%3A%2F%2F10.216.40.189%3A65326%2Forg.apache.dubbo.demo.DemoService%3Faccesslog%3Dtrue%26anyhost%3Dtrue%26application%3Ddemo-provider%26bind.ip%3D10.216.40.189%26bind.port%3D65326%26dubbo%3D2.0.2%26generic%3Dfalse%26interface%3Dorg.apache.dubbo.demo.DemoService%26methods%3DsayHello%26notify%3Dfalse%26pid%3D36536%26qos.port%3D22222%26side%3Dprovider%26specVersion%3D%26timeout%3D100000%26timestamp%3D1556195586976&pid=36536&qos.port=22222&registry=multicast&timestamp=1556195586971
+                        
+                        //这里把前面构造的变量url拼装成一个字符串，并且以key-value(key是export,value是拼接得到的字符串)的形式放到registryURL中，后面RegistryProtocol中会从registryURL中根据key取出这个值。
                         Invoker<?> invoker = proxyFactory.getInvoker(ref, (Class) interfaceClass, registryURL.addParameterAndEncoded(Constants.EXPORT_KEY, url.toFullString()));
                         // DelegateProviderMetaDataInvoker 用于持有 Invoker 和 ServiceConfig
                         DelegateProviderMetaDataInvoker wrapperInvoker = new DelegateProviderMetaDataInvoker(invoker, this);
