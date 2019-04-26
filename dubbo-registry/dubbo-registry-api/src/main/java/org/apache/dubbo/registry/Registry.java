@@ -24,6 +24,11 @@ import org.apache.dubbo.common.URL;
  *
  * @see org.apache.dubbo.registry.RegistryFactory#getRegistry(URL)
  * @see org.apache.dubbo.registry.support.AbstractRegistry
+ * 
+ * 
+ * Registry 继承了：
+RegistryService 接口，拥有拥有注册、订阅、查询三种操作方法。
+Node 接口，拥有节点相关的方法。
  */
 public interface Registry extends Node, RegistryService {
 }

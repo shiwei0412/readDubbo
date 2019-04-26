@@ -649,7 +649,7 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                         Exporter<?> exporter = protocol.export(wrapperInvoker);//protocol是自适应扩展类，形式是Protocol$Adaptive，会根据传入的wrapperInvoker选择对应的协议。
                         exporters.add(exporter);
                     }
-                } else {//无注册中心列表
+                } else {//无注册中心列表，暴露远程服务，但是不注册。用于消费者直连服务提供者。
                 	//调用配置的协议类型对应的实现类，比如本例中使用的dubbo，则会调用实现类DubboProtocol的export方法方法服务。
                     Invoker<?> invoker = proxyFactory.getInvoker(ref, (Class) interfaceClass, url);
                     DelegateProviderMetaDataInvoker wrapperInvoker = new DelegateProviderMetaDataInvoker(invoker, this);

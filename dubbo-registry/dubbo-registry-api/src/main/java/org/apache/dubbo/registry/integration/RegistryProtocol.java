@@ -163,6 +163,7 @@ public class RegistryProtocol implements Protocol {
     }
 
     public void register(URL registryUrl, URL registeredProviderUrl) {
+    	//芋道源码：http://svip.iocoder.cn/Dubbo/registry-api/?self 注册中心单独讲解
         Registry registry = registryFactory.getRegistry(registryUrl);
         registry.register(registeredProviderUrl);
     }
@@ -230,7 +231,7 @@ public class RegistryProtocol implements Protocol {
         // 根据 register 的值决定是否注册服务
         if (register) {
             register(registryUrl, registeredProviderUrl);
-            providerInvokerWrapper.setReg(true);
+            providerInvokerWrapper.setReg(true);//标记向本地注册表的注册服务提供者，已经注册。
         }
 
         // Deprecated! Subscribe to override rules in 2.6.x or before.
@@ -253,16 +254,20 @@ public class RegistryProtocol implements Protocol {
 
     @SuppressWarnings("unchecked")
     private <T> ExporterChangeableWrapper<T> doLocalExport(final Invoker<T> originInvoker, URL providerUrl) {
+    	// 获得在 `bounds` 中的缓存 Key
         String key = getCacheKey(originInvoker);
+        // 从 `bounds` 获得，是不是已经暴露过服务
         ExporterChangeableWrapper<T> exporter = (ExporterChangeableWrapper<T>) bounds.get(key);
         if (exporter == null) {
             synchronized (bounds) {
                 exporter = (ExporterChangeableWrapper<T>) bounds.get(key);
+                // 未暴露过，进行暴露服务
                 if (exporter == null) {
-                	
+                	// 创建 Invoker Delegate 对象
                     final Invoker<?> invokerDelegete = new InvokerDelegate<T>(originInvoker, providerUrl);
                     //shiwei 这里的protocol会根据invokerDelegete的getUrl()方法返回的值，即providerUrl的值来决定选用哪种protocol实现类
                     //比如：providerUrl形式为dubbo://10.216.40.189:20880/org.apache.dubbo.demo.DemoService......时，调用的是DubboProtocol
+                    // 暴露服务，创建 Exporter 对象
                     exporter = new ExporterChangeableWrapper<T>((Exporter<T>) protocol.export(invokerDelegete), originInvoker);
                     bounds.put(key, exporter);
                 }
@@ -322,7 +327,12 @@ public class RegistryProtocol implements Protocol {
         URL registryUrl = getRegistryUrl(originInvoker);
         return registryFactory.getRegistry(registryUrl);
     }
-
+    
+    /**
+     * 获得注册中心 URL
+     * @param originInvoker
+     * @return
+     */
     private URL getRegistryUrl(Invoker<?> originInvoker) {
         URL registryUrl = originInvoker.getUrl();//比如：registry://224.5.6.7:1234/org.apache.dubbo.registry.RegistryService?application=demo-provider&dubbo=2.0.2&export=dubbo%3A%2F%2F10.216.40.189%3A20880%2Forg.apache.dubbo.demo.DemoService%3Fanyhost%3Dtrue%26application%3Ddemo-provider%26bind.ip%3D10.216.40.189%26bind.port%3D20880%26dubbo%3D2.0.2%26generic%3Dfalse%26interface%3Dorg.apache.dubbo.demo.DemoService%26methods%3DsayHello%26pid%3D19668%26qos.port%3D22222%26side%3Dprovider%26specVersion%3D%26timestamp%3D1551925740889&pid=19668&qos.port=22222&registry=multicast&timestamp=1551925740881
         if (REGISTRY_PROTOCOL.equals(registryUrl.getProtocol())) {
@@ -360,7 +370,7 @@ public class RegistryProtocol implements Protocol {
 
     /**
      * Get the address of the providerUrl through the url of the invoker
-     *
+     *获取服务提供者url
      * @param originInvoker
      * @return
      */

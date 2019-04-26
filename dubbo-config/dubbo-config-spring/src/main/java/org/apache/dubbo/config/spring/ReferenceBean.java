@@ -44,6 +44,8 @@ import java.util.Map;
 
 /**
  * ReferenceFactoryBean
+ * 
+ * 它实现了FactoryBean接口，继承了ReferenceConfig，所以ReferenceBean作为dubbo中能生产对象的工厂Bean.
  */
 public class ReferenceBean<T> extends ReferenceConfig<T> implements FactoryBean, ApplicationContextAware, InitializingBean, DisposableBean {
 

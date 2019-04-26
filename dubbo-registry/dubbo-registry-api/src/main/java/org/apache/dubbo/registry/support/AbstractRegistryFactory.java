@@ -41,9 +41,11 @@ public abstract class AbstractRegistryFactory implements RegistryFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractRegistryFactory.class);
 
     // The lock for the acquisition process of the registry
+    //静态属性，锁，用于 #destroyAll() 和 #getRegistry(url) 方法，对 REGISTRIES 访问的竞争
     private static final ReentrantLock LOCK = new ReentrantLock();
 
     // Registry Collection Map<RegistryAddress, Registry>
+    //Registry 集合
     private static final Map<String, Registry> REGISTRIES = new HashMap<>();
 
     /**
@@ -57,6 +59,7 @@ public abstract class AbstractRegistryFactory implements RegistryFactory {
 
     /**
      * Close all created registries
+     * 销毁所有 Registry 对象。
      */
     // TODO: 2017/8/30 to move somewhere else better
     public static void destroyAll() {
@@ -80,6 +83,7 @@ public abstract class AbstractRegistryFactory implements RegistryFactory {
         }
     }
 
+    //例如：url形式为multicast://224.5.6.7:1234/org.apache.dubbo.registry.RegistryService?application=demo-provider&dubbo=2.0.2&interface=org.apache.dubbo.registry.RegistryService&pid=37996&qos.port=22222&timestamp=1556196555234
     @Override
     public Registry getRegistry(URL url) {
         url = url.setPath(RegistryService.class.getName())
@@ -106,6 +110,9 @@ public abstract class AbstractRegistryFactory implements RegistryFactory {
         }
     }
 
+    /**
+     * 子类实现该方法，创建其对应的 Registry 实现类。例如，ZookeeperRegistryFactory 的该方法，创建 ZookeeperRegistry 对象
+     */
     protected abstract Registry createRegistry(URL url);
 
 }
