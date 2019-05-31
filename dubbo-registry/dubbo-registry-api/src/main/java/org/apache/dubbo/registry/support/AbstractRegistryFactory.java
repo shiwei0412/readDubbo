@@ -71,6 +71,7 @@ public abstract class AbstractRegistryFactory implements RegistryFactory {
         try {
             for (Registry registry : getRegistries()) {
                 try {
+                	//取消注册的url和订阅的监听器，停止定时重试，断开连接。
                     registry.destroy();
                 } catch (Throwable e) {
                     LOGGER.error(e.getMessage(), e);

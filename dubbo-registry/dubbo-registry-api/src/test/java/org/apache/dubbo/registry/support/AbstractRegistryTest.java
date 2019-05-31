@@ -74,6 +74,7 @@ public class AbstractRegistryTest {
             }
         };
         // init notify listener
+        //表示形参是urls，函数体是{notifySuccess = true;}，listerner表示的是这个函数，它是NotifyListener接口的一个实现。
         listener = urls -> notifySuccess = true;
         // notify flag
         notifySuccess = false;

@@ -70,7 +70,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 /**
  * ConfigTest
  */
-@Disabled
+//@Disabled
 public class ConfigTest {
 
     private static void unexportService(ServiceConfig<?> config) {
@@ -1019,4 +1019,43 @@ public class ConfigTest {
             ctx.destroy();
         }
     }
+    
+    
+    
+//    @Test
+//    public void testDubboStop() throws Exception {
+//    	System.out.println("1234");
+//    	new Thread(new Runnable(){
+//			
+//			@Override
+//			public void run() {
+//				
+//				try {
+//					System.out.println("56789");
+//					Thread.sleep(20000);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//				
+//			}
+//		}).start();
+//    }
+    
+    public static void main(String[] args) {
+    	System.out.println("1234");
+    	new Thread(new Runnable(){
+			
+			@Override
+			public void run() {
+				
+				try {
+					System.out.println("56789");
+					Thread.sleep(20000);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				
+			}
+		}).start();
+	}
 }

@@ -195,17 +195,17 @@ public class RegistryProtocol implements Protocol {
         URL registryUrl = getRegistryUrl(originInvoker);
         // url to export locally
         //从originInvoker中取出服务提供者信息（以export为key，这是ServiceConfig的642行放进去的）
+        //一个providerUrl的示范：injvm://10.216.40.189:50063/org.apache.dubbo.demo.DemoService?accesslog=true&anyhost=true&application=demo-provider&bind.ip=10.216.40.189&bind.port=50063&dubbo=2.0.2&generic=false&interface=org.apache.dubbo.demo.DemoService&methods=sayHello&notify=false&pid=37996&qos.port=22222&side=provider&specVersion=&timeout=100000&timestamp=1556196555239
         URL providerUrl = getProviderUrl(originInvoker);
 
         // Subscribe the override data
         // FIXME When the provider subscribes, it will affect the scene : a certain JVM exposes the service and call
         //  the same service. Because the subscribed is cached key with the name of the service, it causes the
         //  subscription information to cover.
-        // 获取订阅 URL，将providerUrl的开头替换成provider，并添加几个参数（category=configurators&check=false），
-        //例如：原来的的providerUrl是injvm://10.216.40.189:50063/org.apache.dubbo.demo.DemoService?accesslog=true&anyhost=true&application=demo-provider&bind.ip=10.216.40.189&bind.port=50063&dubbo=2.0.2&generic=false&interface=org.apache.dubbo.demo.DemoService&methods=sayHello&notify=false&pid=37996&qos.port=22222&side=provider&specVersion=&timeout=100000&timestamp=1556196555239
-        //生成的overrideSubscribeUrl是provider://10.216.40.189:50063/org.apache.dubbo.demo.DemoService?accesslog=true&anyhost=true&application=demo-provider&bind.ip=10.216.40.189&bind.port=50063&category=configurators&check=false&dubbo=2.0.2&generic=false&interface=org.apache.dubbo.demo.DemoService&methods=sayHello&notify=false&pid=37996&qos.port=22222&side=provider&specVersion=&timeout=100000&timestamp=1556196555239
+        // 获取订阅 URL，将providerUrl的开头替换成provider，并添加几个参数category=configurators&check=false
+        //例如：生成的overrideSubscribeUrl是provider://10.216.40.189:50063/org.apache.dubbo.demo.DemoService?accesslog=true&anyhost=true&application=demo-provider&bind.ip=10.216.40.189&bind.port=50063&category=configurators&check=false&dubbo=2.0.2&generic=false&interface=org.apache.dubbo.demo.DemoService&methods=sayHello&notify=false&pid=37996&qos.port=22222&side=provider&specVersion=&timeout=100000&timestamp=1556196555239
         final URL overrideSubscribeUrl = getSubscribedOverrideUrl(providerUrl);
-        // 创建监听器
+        // 创建监听器OverrideListener
         final OverrideListener overrideSubscribeListener = new OverrideListener(overrideSubscribeUrl, originInvoker);
         overrideListeners.put(overrideSubscribeUrl, overrideSubscribeListener);
 
@@ -228,14 +228,14 @@ public class RegistryProtocol implements Protocol {
         //to judge if we need to delay publish
         // 获取 register 参数
         boolean register = registeredProviderUrl.getParameter("register", true);
-        // 根据 register 的值决定是否注册服务
+        // 根据 register 的值决定是否注册服务 
         if (register) {
             register(registryUrl, registeredProviderUrl);
             providerInvokerWrapper.setReg(true);//标记向本地注册表的注册服务提供者，已经注册。
         }
 
         // Deprecated! Subscribe to override rules in 2.6.x or before.
-        // 向注册中心进行订阅 override 数据
+        // 向注册中心进行订阅 configurators目录下面的override 数据（overrideSubscribeUrl中的目录值是configurators，它是在前面getSubscribedOverrideUrl方法中设置的），监听器是overrideSubscribeListener
         registry.subscribe(overrideSubscribeUrl, overrideSubscribeListener);
 
         exporter.setRegisterUrl(registeredProviderUrl);

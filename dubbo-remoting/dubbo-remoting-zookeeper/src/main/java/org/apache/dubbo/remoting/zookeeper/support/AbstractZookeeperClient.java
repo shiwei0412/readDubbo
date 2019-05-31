@@ -50,6 +50,9 @@ public abstract class AbstractZookeeperClient<TargetChildListener> implements Zo
         return url;
     }
 
+    /**
+     * ephemeral adj. 短暂的；朝生暮死的
+     */
     @Override
     public void create(String path, boolean ephemeral) {
         if (!ephemeral) {
@@ -84,16 +87,19 @@ public abstract class AbstractZookeeperClient<TargetChildListener> implements Zo
 
     @Override
     public List<String> addChildListener(String path, final ChildListener listener) {
+    	// 获得路径下的监听器数组
         ConcurrentMap<ChildListener, TargetChildListener> listeners = childListeners.get(path);
         if (listeners == null) {
             childListeners.putIfAbsent(path, new ConcurrentHashMap<ChildListener, TargetChildListener>());
             listeners = childListeners.get(path);
         }
+        // 获得是否已经有该监听器
         TargetChildListener targetListener = listeners.get(listener);
         if (targetListener == null) {
             listeners.putIfAbsent(listener, createTargetChildListener(path, listener));
             targetListener = listeners.get(listener);
         }
+        // 向 Zookeeper ，真正发起订阅
         return addTargetChildListener(path, targetListener);
     }
 
