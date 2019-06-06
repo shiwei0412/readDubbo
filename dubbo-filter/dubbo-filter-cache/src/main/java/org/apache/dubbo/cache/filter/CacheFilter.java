@@ -59,6 +59,13 @@ import java.io.Serializable;
  * @see org.apache.dubbo.cache.support.threadlocal.ThreadLocalCache
  * @see org.apache.dubbo.cache.support.expiring.ExpiringCacheFactory
  * @see org.apache.dubbo.cache.support.expiring.ExpiringCache
+ * 
+ * 
+ * 
+ *用于服务消费者和提供者中，提供 结果缓存 的功能
+ *
+ *参考：http://dubbo.apache.org/zh-cn/docs/user/demos/result-cache.html
+ * 
  *
  */
 @Activate(group = {Constants.CONSUMER, Constants.PROVIDER}, value = Constants.CACHE_KEY)

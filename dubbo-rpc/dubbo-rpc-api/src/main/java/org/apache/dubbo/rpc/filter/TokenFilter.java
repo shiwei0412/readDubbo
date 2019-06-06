@@ -31,6 +31,10 @@ import java.util.Map;
 /**
  * Perform check whether given provider token is matching with remote token or not. If it does not match
  * it will not allow to invoke remote method.
+ * 
+ * 用于在服务提供者中，提供 令牌验证 的功能
+ *
+ *http://dubbo.apache.org/zh-cn/docs/user/demos/token-authorization.html
  *
  * @see Filter
  */

@@ -560,6 +560,8 @@ public class ServiceConfig<T> extends AbstractServiceConfig {
                 map.put(Constants.METHODS_KEY, StringUtils.join(new HashSet<String>(Arrays.asList(methods)), ","));
             }
         }
+        
+        //这里生成token，与TokenFilter相对应。参考：http://dubbo.apache.org/zh-cn/docs/user/demos/token-authorization.html
         if (!ConfigUtils.isEmpty(token)) {// 添加 token 到 map 中
             if (ConfigUtils.isDefault(token)) {
                 map.put(Constants.TOKEN_KEY, UUID.randomUUID().toString());

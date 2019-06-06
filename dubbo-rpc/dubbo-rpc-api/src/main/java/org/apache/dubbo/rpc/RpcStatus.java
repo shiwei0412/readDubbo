@@ -32,18 +32,23 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 public class RpcStatus {
 
+	/**
+	 * 基于服务 URL 为维度的 RpcStatus 集合
+	 */
     private static final ConcurrentMap<String, RpcStatus> SERVICE_STATISTICS = new ConcurrentHashMap<String, RpcStatus>();
-
+    /**
+     * 基于服务 URL + 方法维度的 RpcStatus 集合
+     */
     private static final ConcurrentMap<String, ConcurrentMap<String, RpcStatus>> METHOD_STATISTICS = new ConcurrentHashMap<String, ConcurrentMap<String, RpcStatus>>();
     private final ConcurrentMap<String, Object> values = new ConcurrentHashMap<String, Object>();
-    private final AtomicInteger active = new AtomicInteger();
-    private final AtomicLong total = new AtomicLong();
-    private final AtomicInteger failed = new AtomicInteger();
-    private final AtomicLong totalElapsed = new AtomicLong();
-    private final AtomicLong failedElapsed = new AtomicLong();
-    private final AtomicLong maxElapsed = new AtomicLong();
-    private final AtomicLong failedMaxElapsed = new AtomicLong();
-    private final AtomicLong succeededMaxElapsed = new AtomicLong();
+    private final AtomicInteger active = new AtomicInteger();//调用中的次数
+    private final AtomicLong total = new AtomicLong();//总调用次数
+    private final AtomicInteger failed = new AtomicInteger();//总调用失败次数
+    private final AtomicLong totalElapsed = new AtomicLong();//总调用时长
+    private final AtomicLong failedElapsed = new AtomicLong();//总调用失败时长
+    private final AtomicLong maxElapsed = new AtomicLong();//最大调用时长
+    private final AtomicLong failedMaxElapsed = new AtomicLong();//最大调用失败时长
+    private final AtomicLong succeededMaxElapsed = new AtomicLong();//最大调用成功时长
 
     private RpcStatus() {
     }

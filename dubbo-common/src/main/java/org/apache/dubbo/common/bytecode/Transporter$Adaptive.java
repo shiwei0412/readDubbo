@@ -1,24 +1,50 @@
+/*
+ * Decompiled with CFR 0_132.
+ *
+ * Could not load the following classes:
+ *  org.apache.dubbo.common.URL
+ *  org.apache.dubbo.common.extension.ExtensionLoader
+ *  org.apache.dubbo.remoting.ChannelHandler
+ *  org.apache.dubbo.remoting.Client
+ *  org.apache.dubbo.remoting.RemotingException
+ *  org.apache.dubbo.remoting.Server
+ *  org.apache.dubbo.remoting.Transporter
+ */
 package org.apache.dubbo.common.bytecode;
-public class Transporter$Adaptive implements com.alibaba.dubbo.remoting.Transporter {
-    public com.alibaba.dubbo.remoting.Client connect(com.alibaba.dubbo.common.URL arg0, com.alibaba.dubbo.remoting.ChannelHandler arg1) throws com.alibaba.dubbo.remoting.RemotingException {
-        if (arg0 == null) throw new IllegalArgumentException("url == null");
-        com.alibaba.dubbo.common.URL url = arg0;
-        String extName = url.getParameter("client", url.getParameter("transporter", "netty"));
-        if (extName == null)
-            throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.remoting.Transporter) name from url(" + url.toString() + ") use keys([client, transporter])");
-        // 根据extName找到具体适应类，然后调用方法
-        com.alibaba.dubbo.remoting.Transporter extension = (com.alibaba.dubbo.remoting.Transporter) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.remoting.Transporter.class).getExtension(extName);
-        return extension.connect(arg0, arg1);
+
+import org.apache.dubbo.common.URL;
+import org.apache.dubbo.common.extension.ExtensionLoader;
+import org.apache.dubbo.remoting.ChannelHandler;
+import org.apache.dubbo.remoting.Client;
+import org.apache.dubbo.remoting.RemotingException;
+import org.apache.dubbo.remoting.Server;
+import org.apache.dubbo.remoting.Transporter;
+
+public class Transporter$Adaptive
+implements Transporter {
+    public Client connect(URL uRL, ChannelHandler channelHandler) throws RemotingException {
+        if (uRL == null) {
+            throw new IllegalArgumentException("url == null");
+        }
+        URL uRL2 = uRL;
+        String string = uRL2.getParameter("client", uRL2.getParameter("transporter", "netty"));
+        if (string == null) {
+            throw new IllegalStateException(new StringBuffer().append("Fail to get extension(org.apache.dubbo.remoting.Transporter) name from url(").append(uRL2.toString()).append(") use keys([client, transporter])").toString());
+        }
+        Transporter transporter = (Transporter)ExtensionLoader.getExtensionLoader(Transporter.class).getExtension(string);
+        return transporter.connect(uRL, channelHandler);
     }
 
-    public com.alibaba.dubbo.remoting.Server bind(com.alibaba.dubbo.common.URL arg0, com.alibaba.dubbo.remoting.ChannelHandler arg1) throws com.alibaba.dubbo.remoting.RemotingException {
-        if (arg0 == null) throw new IllegalArgumentException("url == null");
-        com.alibaba.dubbo.common.URL url = arg0;
-        String extName = url.getParameter("server", url.getParameter("transporter", "netty"));
-        if (extName == null)
-            throw new IllegalStateException("Fail to get extension(com.alibaba.dubbo.remoting.Transporter) name from url(" + url.toString() + ") use keys([server, transporter])");
-        // 根据extName找到具体适应类，然后调用方法
-        com.alibaba.dubbo.remoting.Transporter extension = (com.alibaba.dubbo.remoting.Transporter) ExtensionLoader.getExtensionLoader(com.alibaba.dubbo.remoting.Transporter.class).getExtension(extName);
-        return extension.bind(arg0, arg1);
+    public Server bind(URL uRL, ChannelHandler channelHandler) throws RemotingException {
+        if (uRL == null) {
+            throw new IllegalArgumentException("url == null");
+        }
+        URL uRL2 = uRL;
+        String string = uRL2.getParameter("server", uRL2.getParameter("transporter", "netty"));
+        if (string == null) {
+            throw new IllegalStateException(new StringBuffer().append("Fail to get extension(org.apache.dubbo.remoting.Transporter) name from url(").append(uRL2.toString()).append(") use keys([server, transporter])").toString());
+        }
+        Transporter transporter = (Transporter)ExtensionLoader.getExtensionLoader(Transporter.class).getExtension(string);
+        return transporter.bind(uRL, channelHandler);
     }
 }

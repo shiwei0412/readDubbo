@@ -59,6 +59,11 @@ import java.util.concurrent.TimeUnit;
  *    &lt;appender-ref ref="foo" /&gt;
  * &lt;/logger&gt;
  * </pre></code>
+ * 
+ * 记录访问日志的过滤器 AccessLogFilter ，需要在 <dubbo:protocol /> 或 <dubbo:provider /> 或 <dubbo:service /> 中，设置 "accesslog" 配置项开启。有两种配置项选择：
+【配置方式一】 true ：将向日志组件 logger 中输出访问日志。
+【配置方式二】访问日志文件路径：直接把访问日志输出到指定文件。
+ * 
  */
 @Activate(group = Constants.PROVIDER, value = Constants.ACCESS_LOG_KEY)
 public class AccessLogFilter implements Filter {

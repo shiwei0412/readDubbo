@@ -27,6 +27,11 @@ import java.util.concurrent.ConcurrentMap;
  * DefaultTPSLimiter is a default implementation for tps filter. It is an in memory based implementation for storing
  * tps information. It internally use
  *
+ *用于服务提供者中，提供 限流 的功能
+ *
+ *1、通过<dubbo:parameter key="tps" value="" /> 配置项，添加到 <dubbo:service /> 或 <dubbo:provider /> 或 <dubbo:protocol /> 中开启
+ *2、通过 <dubbo:parameter key="tps.interval" value="" /> 配置项，设置 TPS 周期。
+ *
  * @see org.apache.dubbo.rpc.filter.TpsLimitFilter
  */
 public class DefaultTPSLimiter implements TPSLimiter {

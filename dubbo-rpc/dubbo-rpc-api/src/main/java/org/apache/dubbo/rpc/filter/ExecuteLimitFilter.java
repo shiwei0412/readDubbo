@@ -30,6 +30,9 @@ import org.apache.dubbo.rpc.RpcStatus;
  * The maximum parallel execution request count per method per service for the provider.If the max configured
  * <b>executes</b> is set to 10 and if invoke request where it is already 10 then it will throws exception. It
  * continue the same behaviour un till it is <10.
+ * 
+ * 在服务提供者，通过 <dubbo:service /> 的 "executes" 统一配置项开启：
+ * 表示服务提供者，每服务的每方法最大可并行执行请求数。
  *
  */
 @Activate(group = Constants.PROVIDER, value = Constants.EXECUTES_KEY)

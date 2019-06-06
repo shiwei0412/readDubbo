@@ -35,6 +35,9 @@ import org.apache.dubbo.rpc.RpcStatus;
  *      If there are more than configured (in this example 2) is trying to invoke remote method, then rest of invocation
  *      will wait for configured timeout(default is 0 second) before invocation gets kill by dubbo.
  * </pre>
+ * 
+ * 在服务消费者，通过 <dubbo:reference /> 的 "actives" 统一配置项开启。
+ * 表示每服务消费者，每服务的每方法最大并发调用数。
  *
  * @see Filter
  */

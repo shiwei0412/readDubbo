@@ -33,6 +33,9 @@ import java.util.Set;
  * DeprecatedFilter logs error message if a invoked method has been marked as deprecated. To check whether a method
  * is deprecated or not it looks for <b>deprecated</b> attribute value and consider it is deprecated it value is <b>true</b>
  *
+ *DeprecatedFilter ，用于服务消费者中，通过 <dubbo: service /> 或 <dubbo:reference /> 或 <dubbo:method /> 的 "deprecated" 配置项为 true 来开启。
+ *废弃调用的过滤器实现类。当调用废弃的服务方法时，打印错误日志提醒。
+ *
  * @see Filter
  */
 @Activate(group = Constants.CONSUMER, value = Constants.DEPRECATED_KEY)

@@ -31,8 +31,17 @@ public class Application {
         DemoService demoService = context.getBean("demoService", DemoService.class);
         
         //在 Consumer 中，我们调用 Service 接口的方法时，实际调用的是 Dubbo 动态代理，例如本例中DemoService生成的代理类的proxy01.java
-        String hello = demoService.sayHello("world");
-        System.out.println("result: " + hello);
-        System.out.println("===================================client===============================================");
+        for(;;) {
+        	try {
+				Thread.sleep(5000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	String hello = demoService.sayHello("world");
+        	System.out.println("result: " + hello);
+        	System.out.println("===================================client===============================================");
+        	
+        }
     }
 }

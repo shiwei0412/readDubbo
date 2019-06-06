@@ -67,6 +67,7 @@ public class RpcInvocation implements Invocation, Serializable {
             if (url.hasParameter(Constants.TIMEOUT_KEY)) {
                 setAttachment(Constants.TIMEOUT_KEY, url.getParameter(Constants.TIMEOUT_KEY));
             }
+            // RpcInvocation 在创建时，“自动”带上 Token
             if (url.hasParameter(Constants.TOKEN_KEY)) {
                 setAttachment(Constants.TOKEN_KEY, url.getParameter(Constants.TOKEN_KEY));
             }

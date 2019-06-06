@@ -77,6 +77,10 @@ public abstract class AbstractServer extends AbstractEndpoint implements Server 
 
     protected abstract void doClose() throws Throwable;
 
+    
+    /**
+     * 用于根据新传入的 url 属性，重置自己内部的一些属性
+     */
     @Override
     public void reset(URL url) {
         if (url == null) {
