@@ -33,6 +33,9 @@ public interface ProxyFactory {
      *getProxy根据invoker目标接口的代理对象，一般是消费者获得代理对象触发远程调用
      * @param invoker
      * @return proxy
+     * 
+     * 
+     * TODO shiwei for客户端调用时使用
      */
     @Adaptive({Constants.PROXY_KEY})
     <T> T getProxy(Invoker<T> invoker) throws RpcException;
@@ -55,6 +58,8 @@ public interface ProxyFactory {
      * @param url
      * @return invoker
      * getInvoker方法将代理对象proxy、接口类type和远程服务的URL获取执行对象Invoker，往往是提供者获得目标执行对象执行目标实现调用
+     * 
+     * TODO shiwei for 服务端暴露时候使用
      * 
      */
     @Adaptive({Constants.PROXY_KEY})

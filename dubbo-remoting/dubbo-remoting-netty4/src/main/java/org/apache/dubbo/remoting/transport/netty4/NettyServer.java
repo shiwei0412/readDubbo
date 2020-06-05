@@ -62,6 +62,9 @@ public class NettyServer extends AbstractServer implements Server {
     private EventLoopGroup workerGroup;
 
     public NettyServer(URL url, ChannelHandler handler) throws RemotingException {
+    	//TODO shiwei03 在启动server的时候就绑定了Dispatcher。
+    	//handler顺序：    MultiMessageHandler --》 HeartbeatHandler --》 AllChannelHandler --》 ExecutorService 由线程池执行后续的调用逻辑，
+    	//server启动时还会加一层NettyServerHandler。
         super(url, ChannelHandlers.wrap(handler, ExecutorUtil.setThreadName(url, SERVER_THREAD_POOL_NAME)));
     }
 

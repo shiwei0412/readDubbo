@@ -78,6 +78,10 @@ public class ExchangeCodec extends TelnetCodec {
         }
     }
 
+    /**
+     * 1、首先先判断此次传输的信息包的大小
+     * 2、根据传输包的大小，确定本次传输的信息是否包含整个请求头，取与请求头固定长度比较最小值，然后读取相关信息到header中。如果此次信息包大于等于16字节，说明请求头是完整的。
+     */
     @Override
     public Object decode(Channel channel, ChannelBuffer buffer) throws IOException {
         int readable = buffer.readableBytes();

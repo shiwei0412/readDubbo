@@ -59,7 +59,7 @@ public class DubboMonitorTest {
         }
 
         public URL getUrl() {
-            return URL.valueOf("dubbo://127.0.0.1:7070?interval=20");
+            return URL.valueOf("dubbo://127.0.0.1:7080?interval=20");
         }
 
         @Override

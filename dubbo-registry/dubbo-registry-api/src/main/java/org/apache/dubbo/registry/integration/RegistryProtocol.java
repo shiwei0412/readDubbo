@@ -104,6 +104,8 @@ public class RegistryProtocol implements Protocol {
     //providerurl <--> exporter
     //用于解决rmi重复暴露端口冲突的问题，已经暴露过的服务不再重新暴露
     private final Map<String, ExporterChangeableWrapper<?>> bounds = new ConcurrentHashMap<>();
+    
+    //Cluster 自适应拓展实现类，也是通过 Dubbo SPI 自动注入的，在ExtensionLoader.createExtension()方法中会调用injectExtension()方法注入值
     private Cluster cluster;
     
     //Protocol 自适应拓展实现类，通过 Dubbo SPI 自动注入。
@@ -443,6 +445,8 @@ public class RegistryProtocol implements Protocol {
         directory.buildRouterChain(subscribeUrl);
         
         // 订阅 providers、configurators、routers 等节点数据
+        //在此方法中，会循环获得到的服务提供者列表，调用 Protocol#refer(type, url) 方法，创建每个调用服务的 Invoker 对象。
+        //在订阅节点数据ZookeeperRegistry的doSubscribe最后，会回调RegistryDirectory的notify()方法，然后调用refreshOverrideAndInvoker() --> refreshInvoker()，创建Invoker对象
         directory.subscribe(subscribeUrl.addParameter(CATEGORY_KEY,
                 PROVIDERS_CATEGORY + "," + CONFIGURATORS_CATEGORY + "," + ROUTERS_CATEGORY));
 

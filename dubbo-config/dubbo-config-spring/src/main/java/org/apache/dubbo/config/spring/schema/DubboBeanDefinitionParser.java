@@ -165,13 +165,17 @@ public class DubboBeanDefinitionParser implements BeanDefinitionParser {
                                 RegistryConfig registryConfig = new RegistryConfig();
                                 registryConfig.setAddress(RegistryConfig.NO_AVAILABLE);
                                 beanDefinition.getPropertyValues().addPropertyValue(beanProperty, registryConfig);
-                            } else if ("provider".equals(property) || "protocol".equals(property) || "registry".equals(property)) {
+                            } else if (("provider".equals(property) || "protocol".equals(property) || "registry".equals(property)) && ServiceBean.class.equals(beanClass)) {//TODO &&之后的内容是从最新master拉取下来的，原来的有bug
                                 /**
                                  * For 'provider' 'protocol' 'registry', keep literal value (should be id/name) and set the value to 'registryIds' 'providerIds' protocolIds'
                                  * The following process should make sure each id refers to the corresponding instance, here's how to find the instance for different use cases:
                                  * 1. Spring, check existing bean by id, see{@link ServiceBean#afterPropertiesSet()}; then try to use id to find configs defined in remote Config Center
                                  * 2. API, directly use id to find configs defined in remote Config Center; if all config instances are defined locally, please use {@link org.apache.dubbo.config.ServiceConfig#setRegistries(List)}
                                  */
+                            	
+                            	//TODO shiwei 在配置文件中配置了monitor之后，会出现异常，就是因为这里给protocol属性添加了Ids后缀，导致装配bean的时候有异常，
+                            	//提示：Error setting property values; nested exception is org.springframework.beans.NotWritablePropertyException: Invalid property 'protocolIds' of bean class 
+                            	//[org.apache.dubbo.config.MonitorConfig]: Bean property 'protocolIds' is not writable or has an invalid setter method. Does the parameter type of the setter match the return type of the getter?
                                 beanDefinition.getPropertyValues().addPropertyValue(beanProperty + "Ids", value);
                             } else {
                                 Object reference;

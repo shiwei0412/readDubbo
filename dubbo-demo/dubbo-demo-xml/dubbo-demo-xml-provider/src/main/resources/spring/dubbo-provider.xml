@@ -34,8 +34,9 @@
     <!-- service implementation, as same as regular local bean -->
     <bean id="demoService" class="org.apache.dubbo.demo.provider.DemoServiceImpl"/>
     <!-- declare the service interface to be exported -->
-    <dubbo:service interface="org.apache.dubbo.demo.DemoService" ref="demoService" timeout="100000"/>
+    <dubbo:service interface="org.apache.dubbo.demo.DemoService" ref="demoService" />
 
-    <bean id="helloService" class="org.apache.dubbo.demo.provider.HelloServiceImpl"/>
-    <dubbo:service interface="org.apache.dubbo.demo.HelloService" ref="helloService" timeout="200000"/>
+    <bean id="helloService" class="org.apache.dubbo.demo.provider.HelloServiceImpl" />
+    <dubbo:service interface="org.apache.dubbo.demo.HelloService" ref="helloService" />
+    
 </beans>
